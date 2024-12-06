@@ -17,31 +17,53 @@ import array
 # Output: 0
 # Explanation: In this case, no transactions are done and the max profit = 0.
 
+# attempt 1
+# class Solution:
+#     def maxProfit(self, prices: list[int]) -> int:
+        
+#         #sliding window technique, check every item after the index you are checking for. 
+#         # This way you can check days 2345 for day 1. and days 345 for day 2 etc.
+        
+#         arr = array.array('i', prices)
+#         highestProfitPossible = 0
+
+#         for index, buyPrice in enumerate(arr):
+#             if (arr[-1] == buyPrice):
+#                 break
+#             for possible in range(arr[index], len(arr)):
+#                 # if the possible sell price is less than the buy price, and is larger than a previous profit
+#                 if (arr[possible] - buyPrice > highestProfitPossible):
+#                     highestProfitPossible = arr[possible] - buyPrice
+#                     print('highest is now ', highestProfitPossible)
+#         return highestProfitPossible
+    
+#attempt 2
+# can do in o(n) just need to use two pointer
+#leave left pointer at the lowest number you have seen
+# variables = buy price, sell price, max profit
 class Solution:
     def maxProfit(self, prices: list[int]) -> int:
         
-        #sliding window technique, check every item after the index you are checking for. 
-        # This way you can check days 2345 for day 1. and days 345 for day 2 etc.
-        
-        arr = array.array('i', prices)
-        highestProfitPossible = 0
+        buyPriceIndex = 0
+        sellPriceIndex = 0
+        maxP = 0
 
-        for buyPrice in arr:
-            if (arr[-1] == buyPrice):
-                break
-            for possible in range(arr.index(buyPrice), len(arr)):
-                # if the possible sell price is less than the buy price, and is larger than a previous profit
-                if (arr[possible] - buyPrice > highestProfitPossible):
-                    highestProfitPossible = arr[possible] - buyPrice
-                    print('highest is now ', highestProfitPossible)
+        for stock in prices:
+            if (prices[buyPriceIndex] < prices[sellPriceIndex]):
+                profit = prices[sellPriceIndex] - prices[buyPriceIndex]
+                # chooses the maximum between these two variables which changes max profit accordingly
+                maxP = max(maxP, profit)
+            else:
+                #since there is a number lower than your current buy price, change the buy price to that one instead
+                buyPriceIndex = sellPriceIndex
 
-        return highestProfitPossible
-    
-
+            sellPriceIndex += 1
+                
+        return maxP
 
 sol = Solution()
 
-test = [2, 10]
+test = [2, 4, 1]
 
 test2 = [7,1,5,3,6,4]
 
